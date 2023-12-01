@@ -52,9 +52,7 @@ public class Day1Exercise2 {
       ch2 = text.charAt(i + 1);
 
       var number = DIGITS_AND_PREFIXES.get(ch + "" + ch2);
-      if (number != null
-          && i <= text.length() - number.length()
-          && text.substring(i, i + number.length()).equals(number)) {
+      if (number != null && i <= text.length() - number.length() && text.startsWith(number, i)) {
         result.append(englishNumberToInteger(number));
         replacedLast = i + number.length() == text.length();
         i += number.length();
@@ -122,7 +120,7 @@ public class Day1Exercise2 {
     int first = findFirstDigitOrZero(resolveNumbers(line));
     int last = findFirstDigitOrZero(resolveNumbersReverse(reverse(line)));
 
-    System.out.println("First: %s, last: %s".formatted(first, last));
+    System.out.printf("First: %s, last: %s%n", first, last);
 
     if (first == 0) {
       first = findFirstDigitOrZero(resolveNumbers(reverse(line)));
