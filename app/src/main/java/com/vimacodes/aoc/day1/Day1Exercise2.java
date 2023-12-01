@@ -90,9 +90,7 @@ public class Day1Exercise2 {
       ch3 = text.charAt(i + 2);
 
       var number = REVERSE_DIGITS_AND_PREFIXES.get(ch + "" + ch2 + ch3);
-      if (number != null
-          && i <= text.length() - number.length()
-          && text.substring(i, i + number.length()).equals(number)) {
+      if (number != null && i <= text.length() - number.length() && text.startsWith(number, i)) {
         result.append(englishNumberToInteger(reverse(number)));
         replacedLast = i + number.length() == text.length();
         i += number.length();
