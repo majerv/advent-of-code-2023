@@ -3,11 +3,13 @@ package com.vimacodes.aoc.day2;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
 @Builder
 @Data
+@AllArgsConstructor
 class Cubes {
 
   int red, green, blue;
@@ -53,5 +55,17 @@ class Cubes {
     Cubes cubes = new Cubes(0, 0, 0);
     setups.forEach(cubes::add);
     return cubes;
+  }
+
+  public long power() {
+    return (long) red * green * blue;
+  }
+
+  public Cubes commonGreatest(Cubes other) {
+    return Cubes.builder()
+        .red(Integer.max(red, other.red))
+        .green(Integer.max(green, other.green))
+        .blue(Integer.max(blue, other.blue))
+        .build();
   }
 }

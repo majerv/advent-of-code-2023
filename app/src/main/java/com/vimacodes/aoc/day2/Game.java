@@ -41,4 +41,12 @@ public class Game {
 
     return Arrays.stream(rounds).map(Cubes::parse).toList();
   }
+
+  public Cubes minimalConfig() {
+    Cubes minimal = new Cubes(0, 0, 0);
+    for (Cubes r : rounds) {
+      minimal = minimal.commonGreatest(r);
+    }
+    return minimal;
+  }
 }

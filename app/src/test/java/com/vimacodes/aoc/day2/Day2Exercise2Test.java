@@ -5,8 +5,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 class Day2Exercise2Test {
-  private static final Cubes CONFIG = Cubes.builder().red(12).green(13).blue(14).build();
-  private final Day2Exercise1 exercise = new Day2Exercise1();
+  private final Day2Exercise2 exercise = new Day2Exercise2();
 
   @ParameterizedTest
   @ValueSource(
@@ -19,8 +18,8 @@ class Day2Exercise2Test {
           Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green
           """)
   void sampleInput(final String input) {
-    int result = exercise.solve(input, CONFIG);
-    Assertions.assertEquals(8, result);
+    long result = exercise.solve(input);
+    Assertions.assertEquals(2286, result);
   }
 
   @ParameterizedTest
@@ -129,7 +128,7 @@ class Day2Exercise2Test {
           Game 100: 5 blue, 2 green, 7 red; 14 red, 15 green, 1 blue; 3 blue, 3 red; 8 green, 10 red, 6 blue; 6 blue, 4 red, 8 green
           """)
   void testInput(final String input) {
-    int result = exercise.solve(input, CONFIG);
-    Assertions.assertEquals(2278, result);
+    long result = exercise.solve(input);
+    Assertions.assertEquals(67953, result);
   }
 }

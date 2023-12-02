@@ -2,13 +2,14 @@ package com.vimacodes.aoc.day2;
 
 class Day2Exercise2 {
 
-  public int solve(final String text, final Cubes config) {
+  public long solve(final String text) {
     return text.lines()
         .peek(System.out::println)
         .map(Game::parse)
-        .peek(System.out::println)
-        .filter(g -> g.isValidConfig(config))
-        .mapToInt(Game::getId)
+        .map(Game::minimalConfig)
+        .peek(c -> System.out.println("minimal: " + c))
+        .mapToLong(Cubes::power)
+        .peek(p -> System.out.println("power: " + p))
         .sum();
   }
 }
