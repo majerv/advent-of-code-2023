@@ -1,6 +1,6 @@
 package com.vimacodes.aoc.day2;
 
-class Day2Exercise1 {
+class Day2Exercise2 {
 
   public int solve(final String text, final Cubes config) {
     return text.lines()

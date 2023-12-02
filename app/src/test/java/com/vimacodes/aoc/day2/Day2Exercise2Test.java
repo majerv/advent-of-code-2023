@@ -1,12 +1,10 @@
 package com.vimacodes.aoc.day2;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-class Day2Exercise1Test {
+class Day2Exercise2Test {
   private static final Cubes CONFIG = Cubes.builder().red(12).green(13).blue(14).build();
   private final Day2Exercise1 exercise = new Day2Exercise1();
 
