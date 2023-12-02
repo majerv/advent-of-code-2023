@@ -1,6 +1,6 @@
 package com.vimacodes.aoc.day1;
 
-public class Day1Exercise1 {
+class Day1Exercise1 {
   public int solve(String text) {
     return text.lines()
         .mapToInt(this::lineToCalibrationValue)

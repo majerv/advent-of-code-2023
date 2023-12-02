@@ -3,7 +3,7 @@ package com.vimacodes.aoc.day1;
 import java.util.Map;
 import javax.annotation.Nonnull;
 
-public class Day1Exercise2 {
+class Day1Exercise2 {
 
   private static final Map<String, String> DIGITS_AND_PREFIXES =
       Map.of(
