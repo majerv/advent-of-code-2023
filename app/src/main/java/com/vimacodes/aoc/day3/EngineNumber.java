@@ -38,4 +38,9 @@ class EngineNumber {
 
     return all;
   }
+
+  public boolean isAdjacentTo(Position position) {
+    int rowDiff = Math.abs(position.row() - start.row());
+    return rowDiff <= 1 && position.col() >= start.col() - 1 && position.col() <= end.col() + 1;
+  }
 }

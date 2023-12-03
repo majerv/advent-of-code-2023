@@ -2,6 +2,7 @@ package com.vimacodes.aoc.day3;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.NonNull;
@@ -38,6 +39,8 @@ class Engine {
   }
 
   private Collection<EngineNumber> collectNumbers(int row) {
+    if (row < 0 || row >= rows) return Collections.emptyList();
+
     List<EngineNumber> numbers = new ArrayList<>();
     String line = scheme.get(row);
 
@@ -51,26 +54,25 @@ class Engine {
         num.append(ch);
         end = col;
       } else {
-        String numString = num.toString();
-        if (!numString.isBlank()) {
-          numbers.add(
-              new EngineNumber(
-                  Integer.parseInt(numString), new Position(row, start), new Position(row, end)));
-        }
+        addResult(row, num, numbers, start, end);
         num = new StringBuilder();
         start = col + 1;
-        //        end = start;
       }
     }
 
+    addResult(row, num, numbers, start, end);
+
+    return numbers;
+  }
+
+  private static void addResult(
+      int row, StringBuilder num, List<EngineNumber> numbers, int start, int end) {
     var numString = num.toString();
     if (!num.toString().isBlank()) {
       numbers.add(
           new EngineNumber(
               Integer.parseInt(numString), new Position(row, start), new Position(row, end)));
     }
-
-    return numbers;
   }
 
   public boolean isAdjacentToSymbol(EngineNumber number) {
@@ -92,5 +94,45 @@ class Engine {
 
   private boolean isValid(Position p) {
     return p.row() >= 0 && p.row() < rows && p.col() >= 0 && p.col() < cols;
+  }
+
+  public Collection<Gear> gears() {
+    List<Gear> gears = new ArrayList<>();
+
+    for (int i = 0; i < scheme.size(); i++) {
+      gears.addAll(collectGears(i));
+    }
+
+    return gears;
+  }
+
+  private Collection<Gear> collectGears(int row) {
+    List<Gear> gears = new ArrayList<>();
+    String line = scheme.get(row);
+
+    for (int col = 0; col < line.length(); ++col) {
+      if (line.charAt(col) == '*') {
+        List<Integer> adjacent = collectAdjacentNumbers(row, col);
+        if (adjacent.size() == 2) {
+          gears.add(new Gear(adjacent.get(0), adjacent.get(1)));
+        }
+      }
+    }
+
+    return gears;
+  }
+
+  private List<Integer> collectAdjacentNumbers(int row, int col) {
+    Position position = new Position(row, col);
+
+    List<EngineNumber> candidates = new ArrayList<>();
+    candidates.addAll(collectNumbers(row - 1));
+    candidates.addAll(collectNumbers(row));
+    candidates.addAll(collectNumbers(row + 1));
+
+    return candidates.stream()
+        .filter(n -> n.isAdjacentTo(position))
+        .map(EngineNumber::getNumber)
+        .toList();
   }
 }
