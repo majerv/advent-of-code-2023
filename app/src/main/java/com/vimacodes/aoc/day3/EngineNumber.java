@@ -34,7 +34,7 @@ class EngineNumber {
     all.add(new Position(start.row(), start.col() - 1));
     all.add(new Position(start.row(), end.col() + 1));
 
-    System.out.println("Neighbour positions: " + all);
+    //    System.out.println("Neighbour positions: " + all);
 
     return all;
   }

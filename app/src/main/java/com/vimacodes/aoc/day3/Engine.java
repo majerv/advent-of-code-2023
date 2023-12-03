@@ -3,6 +3,7 @@ package com.vimacodes.aoc.day3;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.NonNull;
 import lombok.Value;
 
@@ -24,7 +25,13 @@ class Engine {
     for (int i = 0; i < scheme.size(); i++) {
       Collection<EngineNumber> c = collectNumbers(i);
       numbers.addAll(c);
-      System.out.printf("Numbers in row [%s]: %s\n", i, c);
+      System.out.printf(
+          "Numbers in row [%s]: %s\n",
+          i,
+          c.stream()
+              .map(EngineNumber::getNumber)
+              .map(String::valueOf)
+              .collect(Collectors.joining(",")));
     }
 
     return numbers;
@@ -56,22 +63,31 @@ class Engine {
       }
     }
 
+    var numString = num.toString();
+    if (!num.toString().isBlank()) {
+      numbers.add(
+          new EngineNumber(
+              Integer.parseInt(numString), new Position(row, start), new Position(row, end)));
+    }
+
     return numbers;
   }
 
   public boolean isAdjacentToSymbol(EngineNumber number) {
-    System.out.println("CHECKING: " + number);
+    //    System.out.println("CHECKING: " + number);
     List<Position> symbols =
         number.neighbourPositions().stream().filter(p -> isValid(p) && isSymbol(p)).toList();
 
-    System.out.printf("%s has neighbouring symbols: %s\n", number, symbols);
+    //    System.out.printf("%s has neighbouring symbols: %s\n", number, symbols);
 
     return !symbols.isEmpty();
   }
 
   private boolean isSymbol(Position p) {
     char c = scheme.get(p.row()).charAt(p.col());
-    return !Character.isDigit(c) && c != '.';
+    boolean b = !Character.isDigit(c) && c != '.';
+    //    if (b) System.out.println("SYMBOL FOUND: " + c);
+    return b;
   }
 
   private boolean isValid(Position p) {
