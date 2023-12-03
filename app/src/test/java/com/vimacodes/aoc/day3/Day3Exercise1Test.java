@@ -1,7 +1,6 @@
 package com.vimacodes.aoc.day3;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -28,7 +27,6 @@ class Day3Exercise1Test {
     Assertions.assertEquals(4361, result);
   }
 
-  @Disabled
   @ParameterizedTest
   @ValueSource(
       strings =
@@ -176,6 +174,6 @@ class Day3Exercise1Test {
           """)
   void testInput(final String input) {
     long result = exercise.solve(input);
-    Assertions.assertEquals(0, result);
+    Assertions.assertEquals(519861, result);
   }
 }
