@@ -9,7 +9,7 @@ import lombok.Value;
 @Value
 class Card {
 
-  String id;
+  int id;
   List<Integer> winningNumbers;
   List<Integer> numbers;
 
@@ -18,7 +18,8 @@ class Card {
     String rawNumbers = game[1];
     String[] parts = rawNumbers.split("\\|");
 
-    return new Card(game[0], parseInts(parts, 0), parseInts(parts, 1));
+    int id = Integer.parseInt(game[0].split("\\s+")[1].stripLeading().stripTrailing());
+    return new Card(id, parseInts(parts, 0), parseInts(parts, 1));
   }
 
   public int getPoints() {
@@ -26,7 +27,7 @@ class Card {
     return (int) Math.pow(2, commonNumbers.size() - 1);
   }
 
-  private Set<Integer> getCommonNumbers() {
+  public Set<Integer> getCommonNumbers() {
     return winningNumbers.stream().distinct().filter(numbers::contains).collect(Collectors.toSet());
   }
 

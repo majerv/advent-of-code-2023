@@ -5,7 +5,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 class Day4Exercise2Test {
-  private final Day4Exercise1 exercise = new Day4Exercise1();
+  private final Day4Exercise2 exercise = new Day4Exercise2();
 
   @ParameterizedTest
   @ValueSource(
