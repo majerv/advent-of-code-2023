@@ -9,7 +9,7 @@ import lombok.Value;
 
 @Value
 @Builder
-public class Game {
+class Game {
   int id;
   List<Cubes> rounds;
 
