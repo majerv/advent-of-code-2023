@@ -1,10 +1,7 @@
 package com.vimacodes.aoc.day5;
 
 import com.google.common.base.Preconditions;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import lombok.Builder;
 import lombok.Value;
 
@@ -76,17 +73,17 @@ class Almanac {
     }
 
     Almanac almanac = almanacBuilder.build();
-    System.out.println("Almanac: \n" + almanac);
+    //    System.out.println("Almanac: \n" + almanac);
     return almanac;
   }
 
   private static PlantingInstructions parseInstructions(
       ItemType from, ItemType to, List<String> lines, int startIndex) {
-    Map<Long, PlantMapping> instructions = new HashMap<>();
+    NavigableMap<Long, PlantMapping> instructions = new TreeMap<>();
     String line = lines.get(startIndex);
     while (startIndex < lines.size() && !line.isBlank()) {
       line = lines.get(startIndex);
-      System.out.println("Parsing: " + line);
+      //      System.out.println("Parsing: " + line);
       if (!line.isBlank()) {
         String[] parts = line.split("\\s+");
         long source = Long.parseLong(parts[1]);
@@ -113,11 +110,26 @@ class Almanac {
     return seeds;
   }
 
+  public List<Item> seedsRanges() {
+    List<Item> ranges = new ArrayList<>();
+
+    for (int i = 0; i < seeds.size(); i += 2) {
+      long start = seeds.get(i).getId();
+      long rangeLength = seeds.get(i + 1).getId();
+      for (long j = start; j < start + rangeLength; ++j) {
+        ranges.add(new Item(ItemType.SEED, j));
+      }
+    }
+    return ranges;
+  }
+
   public PlantingPlan getPlantingPlan(Item seed) {
     Preconditions.checkArgument(seed.getType() == ItemType.SEED);
-    //    Item location = calculateLocation(seed);
+    return getPlantingPlan(seed.getId());
+  }
 
-    long soilId = seedsToSoil.getDestination(seed);
+  public PlantingPlan getPlantingPlan(long seedId) {
+    long soilId = seedsToSoil.getDestination(seedId);
     long fertilizerId = soilToFertilizer.getDestination(soilId);
     long waterId = fertilizerToWater.getDestination(fertilizerId);
     long lightId = waterToLight.getDestination(waterId);
@@ -127,7 +139,7 @@ class Almanac {
 
     PlantingPlan plantingPlan =
         PlantingPlan.builder()
-            .seed(seed)
+            .seed(new Item(ItemType.SEED, seedId))
             .soil(new Item(ItemType.SOIL, soilId))
             .fertilizer(new Item(ItemType.FERTILIZER, fertilizerId))
             .water(new Item(ItemType.WATER, waterId))
@@ -137,7 +149,7 @@ class Almanac {
             .location(new Item(ItemType.LOCATION, locationId))
             .build();
 
-    System.out.println(plantingPlan);
+    //    System.out.println(plantingPlan);
     return plantingPlan;
   }
 }
