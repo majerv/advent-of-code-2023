@@ -128,6 +128,10 @@ class Almanac {
     return getPlantingPlan(seed.getId());
   }
 
+  public long getSoil(long seedId) {
+    return seedsToSoil.getDestination(seedId);
+  }
+
   public PlantingPlan getPlantingPlan(long seedId) {
     long soilId = seedsToSoil.getDestination(seedId);
     long fertilizerId = soilToFertilizer.getDestination(soilId);
