@@ -1,6 +1,6 @@
 package com.vimacodes.aoc.day5;
 
-class Day5Exercise1 {
+class Day5Exercise2 {
   public long solve(String text) {
     Almanac almanac = Almanac.parse(text);
 

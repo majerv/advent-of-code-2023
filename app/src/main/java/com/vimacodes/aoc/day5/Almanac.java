@@ -1,5 +1,6 @@
 package com.vimacodes.aoc.day5;
 
+import com.google.common.base.Preconditions;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -81,16 +82,16 @@ class Almanac {
 
   private static PlantingInstructions parseInstructions(
       ItemType from, ItemType to, List<String> lines, int startIndex) {
-    Map<Integer, PlantMapping> instructions = new HashMap<>();
+    Map<Long, PlantMapping> instructions = new HashMap<>();
     String line = lines.get(startIndex);
     while (startIndex < lines.size() && !line.isBlank()) {
       line = lines.get(startIndex);
       System.out.println("Parsing: " + line);
       if (!line.isBlank()) {
         String[] parts = line.split("\\s+");
-        int source = Integer.parseInt(parts[1]);
-        int destination = Integer.parseInt(parts[0]);
-        int rangeLength = Integer.parseInt(parts[2]);
+        long source = Long.parseLong(parts[1]);
+        long destination = Long.parseLong(parts[0]);
+        long rangeLength = Long.parseLong(parts[2]);
 
         instructions.put(source, new PlantMapping(source, destination, rangeLength));
       }
@@ -103,7 +104,7 @@ class Almanac {
   private static List<Item> parseSeeds(String line) {
     String s = line.split(":")[1].stripLeading().stripTrailing();
     return Arrays.stream(s.split("\\s+"))
-        .map(Integer::parseInt)
+        .map(Long::parseLong)
         .map(i -> new Item(ItemType.SEED, i))
         .toList();
   }
@@ -112,7 +113,31 @@ class Almanac {
     return seeds;
   }
 
-  public static PlantingPlan getPlantingPlan(Item item) {
-    return PlantingPlan.builder().build();
+  public PlantingPlan getPlantingPlan(Item seed) {
+    Preconditions.checkArgument(seed.getType() == ItemType.SEED);
+    //    Item location = calculateLocation(seed);
+
+    long soilId = seedsToSoil.getDestination(seed);
+    long fertilizerId = soilToFertilizer.getDestination(soilId);
+    long waterId = fertilizerToWater.getDestination(fertilizerId);
+    long lightId = waterToLight.getDestination(waterId);
+    long temperatureId = lightToTemperature.getDestination(lightId);
+    long humidityId = temperatureToHumidity.getDestination(temperatureId);
+    long locationId = humidityToLocation.getDestination(humidityId);
+
+    PlantingPlan plantingPlan =
+        PlantingPlan.builder()
+            .seed(seed)
+            .soil(new Item(ItemType.SOIL, soilId))
+            .fertilizer(new Item(ItemType.FERTILIZER, fertilizerId))
+            .water(new Item(ItemType.WATER, waterId))
+            .light(new Item(ItemType.LIGHT, lightId))
+            .temperature(new Item(ItemType.TEMPERATURE, temperatureId))
+            .humidity(new Item(ItemType.HUMIDITY, humidityId))
+            .location(new Item(ItemType.LOCATION, locationId))
+            .build();
+
+    System.out.println(plantingPlan);
+    return plantingPlan;
   }
 }

@@ -4,8 +4,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-class Day5Exercise1Test {
-  private final Day5Exercise1 exercise = new Day5Exercise1();
+class Day5Exercise2Test {
+  private final Day5Exercise2 exercise = new Day5Exercise2();
 
   @ParameterizedTest
   @ValueSource(
@@ -47,7 +47,7 @@ class Day5Exercise1Test {
           """)
   void sampleInput(final String input) {
     long result = exercise.solve(input);
-    Assertions.assertEquals(35, result);
+    Assertions.assertEquals(46, result);
   }
 
   @ParameterizedTest

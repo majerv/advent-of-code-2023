@@ -6,5 +6,5 @@ import lombok.Value;
 class Item {
 
   ItemType type;
-  int id;
+  long id;
 }

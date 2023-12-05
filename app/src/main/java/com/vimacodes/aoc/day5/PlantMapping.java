@@ -4,7 +4,16 @@ import lombok.Value;
 
 @Value
 class PlantMapping {
-  int sourceRangeStart;
-  int destinationRangeStart;
-  int rangeLength;
+  long sourceRangeStart;
+  long destinationRangeStart;
+  long rangeLength;
+
+  public long getMapping(long sourceId) {
+    long distance = sourceId - sourceRangeStart;
+    return destinationRangeStart + distance;
+  }
+
+  public boolean matches(long sourceId) {
+    return sourceId >= sourceRangeStart && sourceId < sourceRangeStart + rangeLength;
+  }
 }
