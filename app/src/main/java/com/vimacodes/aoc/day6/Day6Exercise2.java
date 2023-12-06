@@ -1,6 +1,6 @@
 package com.vimacodes.aoc.day6;
 
-class Day6Exercise1 {
+class Day6Exercise2 {
   public long solve(String text) {
 
     return Races.parse(text).stream()
