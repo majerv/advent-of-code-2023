@@ -2,7 +2,7 @@ package com.vimacodes.aoc.day7;
 
 enum HandType {
   FiveOfAKind(7),
-  FourOfaKind(6),
+  FourOfAKind(6),
   FullHouse(5),
   ThreeOfAKind(4),
   TwoPair(3),
