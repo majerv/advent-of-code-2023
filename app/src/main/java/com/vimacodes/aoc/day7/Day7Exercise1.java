@@ -1,7 +1,25 @@
 package com.vimacodes.aoc.day7;
 
+import java.util.List;
+import java.util.stream.IntStream;
+
 class Day7Exercise1 {
   public long solve(final String text) {
-    return text.lines().peek(System.out::println).mapToLong(s -> 0).sum();
+    CamelCards camelCards = CamelCards.parse(text);
+
+    List<CardHand> handsInOrder =
+        camelCards.getHands().stream()
+            .sorted(new CardHandComparator())
+            //            .peek(System.out::println)
+            .toList();
+
+    return IntStream.range(0, handsInOrder.size()).map(i -> getWinning(i, handsInOrder)).sum();
+  }
+
+  private static int getWinning(int i, List<CardHand> handsInOrder) {
+    int rank = i + 1;
+    CardHand cardHand = handsInOrder.get(i);
+    //    System.out.printf("rank %d: %s\n", rank, cardHand);
+    return cardHand.getBid() * rank;
   }
 }
