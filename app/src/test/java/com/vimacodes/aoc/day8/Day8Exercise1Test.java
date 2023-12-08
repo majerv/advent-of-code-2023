@@ -34,7 +34,7 @@ class Day8Exercise1Test {
 
           AAA = (BBB, BBB)
           BBB = (AAA, ZZZ)
-          ZZZ = (ZZZ, ZZZ
+          ZZZ = (ZZZ, ZZZ)
           """)
   void sampleInput2(final String input) {
     long result = exercise.solve(input);

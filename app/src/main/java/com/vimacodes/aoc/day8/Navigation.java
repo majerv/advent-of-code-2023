@@ -14,7 +14,9 @@ class Navigation {
   }
 
   public Turn next() {
-    int index = currentTurn++ % turns.size();
-    return turns.get(index);
+    Turn turn = turns.get(currentTurn);
+    ++currentTurn;
+    if (currentTurn >= turns.size()) currentTurn = 0;
+    return turn;
   }
 }

@@ -770,6 +770,6 @@ class Day8Exercise2Test {
           """)
   void testInput(final String input) {
     long result = exercise.solve(input);
-    Assertions.assertEquals(0, result);
+    Assertions.assertEquals(14_265_111_103_729L, result);
   }
 }
