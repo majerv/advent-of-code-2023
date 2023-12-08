@@ -14,7 +14,7 @@ class Day8Exercise1 {
     while (!current.equals(end)) {
       Turn turn = navigation.next();
       Node arrived = network.getNode(current, turn);
-      System.out.printf("At %s turning -> %s\n", current, turn, arrived);
+      System.out.printf("At %s turning %s -> %s\n", current, turn, arrived);
       current = arrived;
       ++steps;
     }
