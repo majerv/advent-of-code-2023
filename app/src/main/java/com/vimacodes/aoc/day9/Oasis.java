@@ -1,7 +1,11 @@
 package com.vimacodes.aoc.day9;
 
-class Oasis {
+import java.util.List;
+
+record Oasis(List<ValueHistory> histories) {
+
   public static Oasis parse(String text) {
-    return null;
+    List<ValueHistory> histories = text.lines().map(ValueHistory::parse).toList();
+    return new Oasis(histories);
   }
 }
