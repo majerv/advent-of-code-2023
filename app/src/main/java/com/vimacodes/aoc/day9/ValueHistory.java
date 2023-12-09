@@ -34,4 +34,8 @@ record ValueHistory(List<Integer> values) {
     Integer lastElement = values.get(values.size() - 1);
     return allEqual ? lastElement : lastElement + extrapolate(diffs);
   }
+
+  public int extrapolateFirst() {
+    return 0;
+  }
 }
