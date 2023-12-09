@@ -36,6 +36,25 @@ record ValueHistory(List<Integer> values) {
   }
 
   public int extrapolateFirst() {
-    return 0;
+    System.out.println("Extrapolating: ");
+    int result = extrapolateFirst(values);
+    System.out.printf("result: %s\n\n", result);
+    return result;
+  }
+
+  private int extrapolateFirst(List<Integer> values) {
+    System.out.println(values);
+    List<Integer> diffs = new ArrayList<>();
+    boolean allEqual = true;
+    int diff;
+
+    for (int i = 0; i < values.size() - 1; i++) {
+      diff = values.get(i + 1) - values.get(i);
+      diffs.add(diff);
+      allEqual &= diff == 0;
+    }
+
+    Integer firstElement = values.get(0);
+    return allEqual ? firstElement : firstElement - extrapolateFirst(diffs);
   }
 }
