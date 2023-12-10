@@ -89,9 +89,12 @@ class Maze {
   }
 
   public String toPrettyString() {
-    return maze.stream()
-        .map(row -> row.stream().map(Object::toString).collect(Collectors.joining("")))
-        .collect(Collectors.joining("\n"));
+    String mazePretty =
+        maze.stream()
+            .map(row -> row.stream().map(Object::toString).collect(Collectors.joining("")))
+            .collect(Collectors.joining("\n"));
+
+    return "rows: %d, cols: %d\n%s\n".formatted(rows, cols, mazePretty);
   }
 
   private static boolean isUpLink(Character c, Character link) {
@@ -120,5 +123,10 @@ class Maze {
       case 'S', '-', 'L', 'F' -> link == '-' || link == 'J' || link == '7' || link == 'S';
       default -> false;
     };
+  }
+
+  public List<Position> findEnclosedPositions() {
+    List<Position> enclosed = new ArrayList<>();
+    return enclosed;
   }
 }
