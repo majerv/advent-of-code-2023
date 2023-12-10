@@ -12,13 +12,20 @@ class Day10Exercise1Test {
   @ValueSource(strings = "day10_sample")
   void sampleInput(final String inputName) {
     long result = exercise.solve(Inputs.resourceToString(inputName));
-    Assertions.assertEquals(0, result);
+    Assertions.assertEquals(4, result);
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = "day10_sample2")
+  void sampleInput2(final String inputName) {
+    long result = exercise.solve(Inputs.resourceToString(inputName));
+    Assertions.assertEquals(8, result);
   }
 
   @ParameterizedTest
   @ValueSource(strings = "day10_input")
   void testInput(final String inputName) {
     long result = exercise.solve(Inputs.resourceToString(inputName));
-    Assertions.assertEquals(0, result);
+    Assertions.assertEquals(6979, result);
   }
 }
