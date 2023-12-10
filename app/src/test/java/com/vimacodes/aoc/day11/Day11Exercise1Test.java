@@ -1,24 +1,25 @@
 package com.vimacodes.aoc.day11;
 
 import com.vimacodes.aoc.Inputs;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 class Day11Exercise1Test {
   private final Day11Exercise1 exercise = new Day11Exercise1();
 
   @ParameterizedTest
-  @ValueSource(strings = "day11_sample")
-  void sampleInput(final String inputName) {
+  @MethodSource
+  void testInputs(final String inputName, long expectedResult) {
     long result = exercise.solve(Inputs.resourceToString(inputName));
-    Assertions.assertEquals(0, result);
+    Assertions.assertEquals(expectedResult, result);
   }
 
-  @ParameterizedTest
-  @ValueSource(strings = "day11_input")
-  void testInput(final String inputName) {
-    long result = exercise.solve(Inputs.resourceToString(inputName));
-    Assertions.assertEquals(0, result);
+  private static Stream<Arguments> testInputs() {
+    return Stream.of(
+            Arguments.of("day11_sample", 0),
+            Arguments.of("day11_input", 0));
   }
 }
