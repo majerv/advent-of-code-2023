@@ -4,13 +4,13 @@ import java.util.List;
 
 class Day10Exercise2 {
 
-  public long solve(final String text) {
+  public long solve(final String text, Character cheat) {
     Maze maze = Maze.parse(text);
     System.out.println(maze.toPrettyString());
 
     Position start = maze.findStart();
     List<Position> loop = maze.findLoop(start);
 
-    return maze.findEnclosedPositions().size();
+    return maze.findPositionsEnclosedByWithRayCast(loop, cheat);
   }
 }
