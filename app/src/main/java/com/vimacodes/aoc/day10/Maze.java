@@ -128,12 +128,9 @@ class Maze {
     };
   }
 
-  public int findPositionsEnclosedByWithRayCast(List<Position> loop, Character cheat) {
+  public int findPositionsEnclosedByWithRayCast(List<Position> loop) {
     int enclosed = 0;
     Character[][] clearMaze = new Character[rows][cols];
-
-    Position start = findStart();
-    maze.get(start.getRow()).set(start.getCol(), calculateRealStartPipeSign(cheat));
 
     Position current;
     Character c;
