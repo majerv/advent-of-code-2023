@@ -45,8 +45,33 @@ class Universe {
     return Universe.parse(printToExpandedUniverse());
   }
 
-  public Universe expand(int factor) {
-    return Universe.parse(printToExpandedUniverse());
+  public ExpandedUniverse expand(int factor) {
+    Map<Integer, Position> newGalaxies = galaxies;
+
+    Set<Integer> rowsWithGalaxies =
+        galaxyLocations.keySet().stream().map(Position::getRow).collect(Collectors.toSet());
+    Set<Integer> colsWithGalaxies =
+        galaxyLocations.keySet().stream().map(Position::getCol).collect(Collectors.toSet());
+
+    for (Map.Entry<Integer, Position> galaxy : galaxies.entrySet()) {
+      Position position = galaxy.getValue();
+      Position newPos =
+          new Position(
+              updateIndex(position.getRow(), rowsWithGalaxies, factor),
+              updateIndex(position.getCol(), colsWithGalaxies, factor));
+      newGalaxies.put(galaxy.getKey(), newPos);
+    }
+
+    return new ExpandedUniverse(newGalaxies);
+  }
+
+  private int updateIndex(int index, Set<Integer> indicesWithGalaxies, int factor) {
+    int count = 0;
+    for (int i = 0; i < index; i++) {
+      if (!indicesWithGalaxies.contains(i)) ++count;
+    }
+
+    return count * factor + index - count;
   }
 
   public String printToExpandedUniverse() {

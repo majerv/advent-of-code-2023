@@ -6,10 +6,7 @@ class Day11Exercise2 {
     Universe universe = Universe.parse(text);
     System.out.println(universe.prettyPrintWithNumbers());
 
-    Universe expanded = universe.expand(10);
-    //    System.out.println(expanded.prettyPrint());
-    //    System.out.println(expanded.prettyPrintWithNumbers());
-
-    return expanded.apsp().values().stream().mapToInt(i -> i).sum();
+    ExpandedUniverse expanded = universe.expand(1_000_000);
+    return expanded.apsp().values().stream().mapToLong(i -> i).sum();
   }
 }
