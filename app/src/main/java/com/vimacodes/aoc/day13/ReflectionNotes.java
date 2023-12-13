@@ -29,14 +29,18 @@ class ReflectionNotes {
   }
 
   public long summarize() {
-    return summarizeVertical() + summarizeHorizontal();
+    return summarizeWithSmudges(0);
   }
 
-  private long summarizeHorizontal() {
+  public long summarizeWithSmudges(final int expectedSmudges) {
+    return summarizeVertical(expectedSmudges) + summarizeHorizontal(expectedSmudges);
+  }
+
+  private long summarizeHorizontal(final int expectedSmudges) {
     int result = 0;
 
-    for (int row = 0; row < rows - 1; row++) { // for each row [1, size-1]
-      boolean reflection = true;
+    for (int row = 0; row < rows - 1; row++) { // for each row [0, size-1]
+      int smudges = 0;
       int above, below;
 
       for (int diff = 0; diff < cols; diff++) {
@@ -44,21 +48,22 @@ class ReflectionNotes {
         below = row + diff + 1;
         if (0 <= above && below < rows && above < below) {
           for (int j = 0; j < cols; j++) {
-            reflection &= matrix[above][j] == matrix[below][j];
+            boolean error = matrix[above][j] != matrix[below][j];
+            if (error) ++smudges;
           }
         }
       }
-      if (reflection) result += 100 * (row + 1);
+      if (smudges == expectedSmudges) result += 100 * (row + 1);
     }
 
     return result;
   }
 
-  private long summarizeVertical() {
+  private long summarizeVertical(final int expectedSmudges) {
     int result = 0;
 
     for (int col = 0; col < cols - 1; col++) { // for each column [0, size-1]
-      boolean reflection = true;
+      int smudges = 0;
       int left, right;
 
       for (int diff = 0; diff < cols; diff++) {
@@ -66,11 +71,12 @@ class ReflectionNotes {
         right = col + diff + 1;
         if (0 <= left && right < cols && left < right) {
           for (int i = 0; i < rows; i++) {
-            reflection &= matrix[i][left] == matrix[i][right];
+            boolean error = matrix[i][left] != matrix[i][right];
+            if (error) ++smudges;
           }
         }
       }
-      if (reflection) result += col + 1;
+      if (smudges == expectedSmudges) result += col + 1;
     }
 
     return result;
