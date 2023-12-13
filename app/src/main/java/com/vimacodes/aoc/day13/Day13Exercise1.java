@@ -1,13 +1,16 @@
 package com.vimacodes.aoc.day13;
 
+import java.util.Arrays;
+
 class Day13Exercise1 {
   public long solve(final String text) {
-    return text.lines()
-        //        .map(Class::parse)
+    String[] parts = text.split("\\r\\n\\r\\n");
+
+    return Arrays.stream(parts)
+        .map(ReflectionNotes::parse)
+        //        .peek(s -> System.out.printf("%s\n----\n", s))
         .peek(System.out::println)
-        //        .mapToLong(Class::reduce)
-        .peek(System.out::println)
-        .mapToInt(s -> 0)
+        .mapToLong(ReflectionNotes::summarize)
         .sum();
   }
 }
