@@ -1,14 +1,61 @@
 package com.vimacodes.aoc.day14;
 
-import java.util.List;
-import lombok.Value;
+import com.google.common.base.Preconditions;
+import java.util.*;
 
-@Value
 class Platform {
 
-  int rows;
-  int cols;
-  Character[][] platform;
+  private static final int MINIMUM_IDLE_CYCLES = 1000;
+
+  private final int rows;
+  private final int cols;
+  private final Character[][] platform;
+
+  private Loop loop;
+
+  public Platform(Character[][] platform) {
+    this.platform = platform;
+
+    rows = platform.length;
+    Preconditions.checkArgument(rows > 0);
+    cols = platform[0].length;
+  }
+
+  public void findLoop() {
+    Set<Long> results = new HashSet<>();
+
+    int counter = 0;
+    int idleCycles = 0;
+    long result;
+
+    while (idleCycles < MINIMUM_IDLE_CYCLES) {
+      runCycle();
+      ++counter;
+
+      result = load();
+      //      System.out.printf("Load after %d cycles: %d\n", counter, result);
+      boolean added = results.add(result);
+
+      if (added) idleCycles = 0;
+      else ++idleCycles;
+    }
+
+    int start = counter + 1;
+    Map<Integer, Long> stepToResult = new TreeMap<>();
+    for (int i = 0; i < MINIMUM_IDLE_CYCLES; i++) {
+      runCycle();
+      ++counter;
+      result = load();
+      //      if (counter < 1200) System.out.printf("Load after %d cycles: %d\n", counter, result);
+      stepToResult.put(counter, result);
+    }
+
+    System.out.println(results);
+    System.out.println(stepToResult);
+
+    loop = new Loop(start, stepToResult);
+    System.out.println("Loop found: " + loop);
+  }
 
   public static Platform parse(String text) {
     List<String> lines = text.lines().toList();
@@ -25,7 +72,7 @@ class Platform {
       }
     }
 
-    return new Platform(rows, cols, platform);
+    return new Platform(platform);
   }
 
   public Platform tiltNorth() {
@@ -71,6 +118,12 @@ class Platform {
     }
 
     return str.toString();
+  }
+
+  public void runCycle(int rounds) {
+    for (int i = 0; i < rounds; i++) {
+      runCycle();
+    }
   }
 
   public void runCycle() {
@@ -129,5 +182,21 @@ class Platform {
         }
       }
     }
+  }
+
+  public long loadAfterCycles(int cycles) {
+    if (loop == null) findLoop();
+
+    if (cycles < loop.getStartAt()) {
+      runCycle(cycles);
+      return load();
+    }
+
+    Map<Integer, Long> results = loop.getStepToResult();
+    int diff = cycles - loop.getStartAt();
+    int shift = diff % results.size();
+    int index = loop.getStartAt() + shift + 1;
+    System.out.printf("Diff %d shift %d index %d\n", diff, shift, index);
+    return results.get(index);
   }
 }
