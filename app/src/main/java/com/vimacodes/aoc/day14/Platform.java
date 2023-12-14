@@ -72,4 +72,62 @@ class Platform {
 
     return str.toString();
   }
+
+  public void runCycle() {
+    tiltNorth();
+    tiltWest();
+    tiltSouth();
+    tiltEast();
+  }
+
+  public void tiltWest() {
+    for (int i = 0; i < rows; i++) {
+      for (int j = 1; j < cols; j++) {
+        if (platform[i][j] == 'O') {
+          int k = j - 1;
+          char swap;
+          while (k >= 0 && platform[i][k] == '.') {
+            swap = platform[i][k];
+            platform[i][k] = platform[i][k + 1];
+            platform[i][k + 1] = swap;
+            --k;
+          }
+        }
+      }
+    }
+  }
+
+  public void tiltSouth() {
+    for (int i = 1; i < rows; i++) {
+      for (int j = 0; j < cols; j++) {
+        if (platform[rows - i - 1][j] == 'O') {
+          int k = rows - i;
+          char swap;
+          while (k < rows && platform[k][j] == '.') {
+            swap = platform[k][j];
+            platform[k][j] = platform[k - 1][j];
+            platform[k - 1][j] = swap;
+            ++k;
+          }
+        }
+      }
+    }
+  }
+
+  public void tiltEast() {
+    for (int i = 0; i < rows; i++) {
+      for (int j = 1; j < cols; j++) {
+        if (platform[i][cols - j - 1] == 'O') {
+          int k = cols - j;
+          char swap;
+          while (k < cols && platform[i][k] == '.') {
+            swap = platform[i][k];
+            platform[i][k] = platform[i][k - 1];
+            platform[i][k - 1] = swap;
+            ++k;
+          }
+        }
+      }
+    }
+  }
 }
