@@ -17,20 +17,22 @@ class HASHMAP {
     Map<Integer, Map<String, ValueHolder>> boxes = new HashMap<>();
 
     for (Step step : steps) {
-      int box = HASHAlgorithm.hash(step.getLabel());
+      String label = step.getLabel();
+      int box = HASHAlgorithm.hash(label);
       if (step.isRemove()) {
-        if (boxes.containsKey(box)) boxes.get(box).remove(step.getLabel());
+        if (boxes.containsKey(box)) boxes.get(box).remove(label);
       } else {
+        Integer focalLength = step.getFocalLength();
         if (boxes.containsKey(box)) {
           var actualBox = boxes.get(box);
-          if (actualBox.containsKey(step.getLabel())) {
-            actualBox.get(step.getLabel()).setValue(step.getFocalLength());
+          if (actualBox.containsKey(label)) {
+            actualBox.get(label).setValue(focalLength);
           } else {
-            actualBox.put(step.getLabel(), new ValueHolder(step.getFocalLength()));
+            actualBox.put(label, new ValueHolder(focalLength));
           }
         } else {
           LinkedHashMap<String, ValueHolder> newMap = new LinkedHashMap<>();
-          newMap.put(step.getLabel(), new ValueHolder(step.getFocalLength()));
+          newMap.put(label, new ValueHolder(focalLength));
           boxes.put(box, newMap);
         }
       }
