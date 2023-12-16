@@ -39,8 +39,14 @@ class Contraption {
   }
 
   public void energize() {
+    energize(new Instruction(0, 0, Direction.RIGHT));
+  }
+
+  public void energize(Instruction startInst) {
+    reset();
+
     Deque<Instruction> instructions = new LinkedList<>();
-    instructions.add(new Instruction(0, 0, Direction.RIGHT));
+    instructions.add(startInst);
 
     Set<Instruction> completedInstructions = new HashSet<>();
     Instruction inst;
@@ -50,9 +56,12 @@ class Contraption {
         Tile tile = tiles.get(inst.getRow()).get(inst.getCol());
         instructions.addAll(tile.energize(inst));
         completedInstructions.add(inst);
-//        prettyPrint();
       }
     }
+  }
+
+  private void reset() {
+    tiles.stream().flatMap(Collection::stream).forEach(t -> t.energized = false);
   }
 
   public long energizedTileCount() {

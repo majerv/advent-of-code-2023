@@ -19,8 +19,8 @@ class Day16Exercise2Test {
 
   private static Stream<Arguments> testInputs() {
     return Stream.of(
-        Arguments.of("day16_sample", 51) // , //
-        //        Arguments.of("day16_input", 0) //
+        Arguments.of("day16_sample", 51), //
+        Arguments.of("day16_input", 8225) //
         );
   }
 }
