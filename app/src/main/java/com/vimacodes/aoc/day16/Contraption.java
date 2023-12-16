@@ -1,7 +1,6 @@
 package com.vimacodes.aoc.day16;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import lombok.Value;
 
 @Value
@@ -39,11 +38,22 @@ class Contraption {
     System.out.println(str);
   }
 
-  public Contraption energize() {
-    return this;
-  }
+  public void energize() {
+    Deque<Instruction> instructions = new LinkedList<>();
+    instructions.add(new Instruction(0, 0, Direction.RIGHT));
 
-  public void energize(int row, int col, Direction direction) {}
+    Set<Instruction> completedInstructions = new HashSet<>();
+    Instruction inst;
+    while (!instructions.isEmpty()) {
+      inst = instructions.removeFirst();
+      if (inst.isValid(rows, cols) && !completedInstructions.contains(inst)) {
+        Tile tile = tiles.get(inst.getRow()).get(inst.getCol());
+        instructions.addAll(tile.energize(inst));
+        completedInstructions.add(inst);
+//        prettyPrint();
+      }
+    }
+  }
 
   public long energizedTileCount() {
     return tiles.stream().flatMap(Collection::stream).filter(Tile::isEnergized).count();

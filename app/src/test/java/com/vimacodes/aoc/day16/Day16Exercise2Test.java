@@ -7,8 +7,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-class Day16Exercise1Test {
-  private final Day16Exercise1 exercise = new Day16Exercise1();
+class Day16Exercise2Test {
+  private final Day16Exercise2 exercise = new Day16Exercise2();
 
   @ParameterizedTest
   @MethodSource
@@ -19,8 +19,8 @@ class Day16Exercise1Test {
 
   private static Stream<Arguments> testInputs() {
     return Stream.of(
-        Arguments.of("day16_sample", 46), //
-        Arguments.of("day16_input", 8034) //
+        Arguments.of("day16_sample", 51) // , //
+        //        Arguments.of("day16_input", 0) //
         );
   }
 }
