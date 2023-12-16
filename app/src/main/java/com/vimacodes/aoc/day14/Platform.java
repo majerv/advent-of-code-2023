@@ -5,8 +5,6 @@ import java.util.*;
 
 class Platform {
 
-  private static final int MINIMUM_IDLE_CYCLES = 1000;
-
   private final int rows;
   private final int cols;
   private final Character[][] platform;
@@ -22,38 +20,23 @@ class Platform {
   }
 
   public void findLoop() {
-    Set<Long> results = new HashSet<>();
+    Map<String, Integer> prints = new HashMap<>();
 
     int counter = 0;
-    int idleCycles = 0;
-    long result;
+    boolean cycleFound = false;
 
-    while (idleCycles < MINIMUM_IDLE_CYCLES) {
+    String print = "";
+    while (!cycleFound) {
       runCycle();
       ++counter;
 
-      result = load();
-      //      System.out.printf("Load after %d cycles: %d\n", counter, result);
-      boolean added = results.add(result);
-
-      if (added) idleCycles = 0;
-      else ++idleCycles;
+      print = prettyPrint();
+      cycleFound = prints.containsKey(print);
+      if (!cycleFound) prints.put(print, counter);
     }
 
-    int start = counter + 1;
-    Map<Integer, Long> stepToResult = new TreeMap<>();
-    for (int i = 0; i < MINIMUM_IDLE_CYCLES; i++) {
-      runCycle();
-      ++counter;
-      result = load();
-      //      if (counter < 1200) System.out.printf("Load after %d cycles: %d\n", counter, result);
-      stepToResult.put(counter, result);
-    }
-
-    System.out.println(results);
-    System.out.println(stepToResult);
-
-    loop = new Loop(start, stepToResult);
+    int start = prints.get(print);
+    loop = new Loop(start, counter - start);
     System.out.println("Loop found: " + loop);
   }
 
@@ -187,16 +170,12 @@ class Platform {
   public long loadAfterCycles(int cycles) {
     if (loop == null) findLoop();
 
-    if (cycles < loop.getStartAt()) {
-      runCycle(cycles);
-      return load();
-    }
+    Preconditions.checkArgument(loop.getStartAt() < cycles);
 
-    Map<Integer, Long> results = loop.getStepToResult();
     int diff = cycles - loop.getStartAt();
-    int shift = diff % results.size();
-    int index = loop.getStartAt() + shift + 1;
-    System.out.printf("Diff %d shift %d index %d\n", diff, shift, index);
-    return results.get(index);
+    int shift = diff % loop.getLength();
+
+    runCycle(shift);
+    return load();
   }
 }
