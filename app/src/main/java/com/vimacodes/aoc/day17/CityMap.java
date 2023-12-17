@@ -45,7 +45,6 @@ class CityMap {
       if (moveInstruction.getPosition().equals(end)) return move.getHeatLoss();
 
       if (!completedInstructions.contains(moveInstruction) && moveInstruction.isValid(rows, cols)) {
-        //        System.out.println("\nMoving from: " + move);
         completedInstructions.add(moveInstruction);
 
         List<Instruction> nextSteps = moveInstruction.nextSteps();
@@ -54,7 +53,6 @@ class CityMap {
             int hl = move.getHeatLoss() + weight(next.getPosition());
             Move newMove = new Move(hl, next);
             if (!completedInstructions.contains(newMove.getInstruction())) {
-              //              System.out.println("Registering: " + newMove);
               moves.add(newMove);
             }
           }
@@ -84,7 +82,6 @@ class CityMap {
   private Optional<Integer> minimal(
       Instruction from, Instruction to, Set<Position> visited, Map<Position, Integer> memo) {
     Position fromPosition = from.getPosition();
-    //    System.out.printf("Minimal: %s -> %s %s\n", fromPosition, to.getPosition(), visited);
     if (memo.containsKey(fromPosition)) {
       return Optional.of(memo.get(fromPosition));
     }
