@@ -25,15 +25,18 @@ public class CityMap {
   }
 
   public int minimalHeatLossPath() {
-    return minimalHeatLossPath(Instruction::nextSteps);
+    return minimalHeatLossPath(Instruction::nextSteps, 1, Instruction.COUNTER_LIMIT);
   }
 
   public int minimalHeatLossPathWithUltraCrucibles() {
-    return minimalHeatLossPath(Instruction::nextStepsUltra);
+    return minimalHeatLossPath(
+        Instruction::nextStepsUltra, Instruction.ULTRA_COUNTER_MIN, Instruction.ULTRA_COUNTER_MAX);
   }
 
   public int minimalHeatLossPath(
-      Function<Instruction, List<Instruction>> nextInstructionsProvider) {
+      Function<Instruction, List<Instruction>> nextInstructionsProvider,
+      int minSteps,
+      int maxSteps) {
     PriorityQueue<Move> moves = new PriorityQueue<>(new Move.HeatLossComparator());
     Set<Instruction> completedInstructions = new HashSet<>();
 
@@ -49,16 +52,17 @@ public class CityMap {
       move = moves.remove();
 
       Instruction moveInstruction = move.getInstruction();
-      if (moveInstruction.getPosition().equals(end) && moveInstruction.getCounter() >= 4) {
+      if (moveInstruction.getPosition().equals(end) && moveInstruction.getCounter() >= minSteps) {
         return move.getHeatLoss();
       }
 
-      if (!completedInstructions.contains(moveInstruction) && moveInstruction.isValid(rows, cols)) {
+      if (!completedInstructions.contains(moveInstruction)
+          && moveInstruction.isValid(rows, cols, maxSteps)) {
         completedInstructions.add(moveInstruction);
 
         List<Instruction> nextSteps = nextInstructionsProvider.apply(moveInstruction);
         for (Instruction next : nextSteps) {
-          if (next.isValid(rows, cols)) {
+          if (next.isValid(rows, cols, maxSteps)) {
             int hl = move.getHeatLoss() + weight(next.getPosition());
             Move newMove = new Move(hl, next);
             if (!completedInstructions.contains(newMove.getInstruction())) {
@@ -112,7 +116,7 @@ public class CityMap {
     List<Instruction> validSteps =
         nextSteps.stream()
             .filter(s -> !newVisited.contains(s.getPosition()))
-            .filter(s -> s.isValid(rows, cols))
+            .filter(s -> s.isValid(rows, cols, Instruction.COUNTER_LIMIT))
             .toList();
     //    System.out.println("Valid next steps: " + validSteps);
 
@@ -120,7 +124,7 @@ public class CityMap {
         validSteps.stream()
             .map(s -> minimal(s, to, newVisited, memo))
             .filter(Optional::isPresent)
-            .mapToInt(i -> i.get())
+            .mapToInt(Optional::get)
             .min();
     //    Preconditions.checkArgument(min.isPresent());
 

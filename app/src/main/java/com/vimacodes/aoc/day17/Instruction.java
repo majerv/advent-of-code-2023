@@ -5,10 +5,10 @@ import lombok.Value;
 
 @Value
 class Instruction {
-  private static final int COUNTER_LIMIT = 10;
+  static final int COUNTER_LIMIT = 3;
 
-  private static final int ULTRA_COUNTER_MIN = 4;
-  private static final int ULTRA_COUNTER_MAX = 10;
+  static final int ULTRA_COUNTER_MIN = 4;
+  static final int ULTRA_COUNTER_MAX = 10;
 
   int row;
   int col;
@@ -35,8 +35,8 @@ class Instruction {
     return new Position(row, col);
   }
 
-  public boolean isValid(int rows, int cols) {
-    if (counter > COUNTER_LIMIT) return false;
+  public boolean isValid(int rows, int cols, int maxSteps) {
+    if (counter > maxSteps) return false;
 
     return 0 <= row && row < rows && 0 <= col && col < cols;
   }
