@@ -1,11 +1,11 @@
 package com.vimacodes.aoc.day17;
 
 import java.util.*;
-import javax.swing.*;
+import java.util.function.Function;
 import lombok.Value;
 
 @Value
-class CityMap {
+public class CityMap {
 
   int rows;
   int cols;
@@ -25,7 +25,15 @@ class CityMap {
   }
 
   public int minimalHeatLossPath() {
-    int count = 0;
+    return minimalHeatLossPath(Instruction::nextSteps);
+  }
+
+  public int minimalHeatLossPathWithUltraCrucibles() {
+    return minimalHeatLossPath(Instruction::nextStepsUltra);
+  }
+
+  public int minimalHeatLossPath(
+      Function<Instruction, List<Instruction>> nextInstructionsProvider) {
     PriorityQueue<Move> moves = new PriorityQueue<>(new Move.HeatLossComparator());
     Set<Instruction> completedInstructions = new HashSet<>();
 
@@ -38,16 +46,17 @@ class CityMap {
     int minimal = 0;
     Move move;
     while (!moves.isEmpty()) {
-      ++count;
       move = moves.remove();
 
       Instruction moveInstruction = move.getInstruction();
-      if (moveInstruction.getPosition().equals(end)) return move.getHeatLoss();
+      if (moveInstruction.getPosition().equals(end) && moveInstruction.getCounter() >= 4) {
+        return move.getHeatLoss();
+      }
 
       if (!completedInstructions.contains(moveInstruction) && moveInstruction.isValid(rows, cols)) {
         completedInstructions.add(moveInstruction);
 
-        List<Instruction> nextSteps = moveInstruction.nextSteps();
+        List<Instruction> nextSteps = nextInstructionsProvider.apply(moveInstruction);
         for (Instruction next : nextSteps) {
           if (next.isValid(rows, cols)) {
             int hl = move.getHeatLoss() + weight(next.getPosition());

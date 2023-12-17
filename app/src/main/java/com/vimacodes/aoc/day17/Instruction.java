@@ -5,7 +5,10 @@ import lombok.Value;
 
 @Value
 class Instruction {
-  private static final int COUNTER_LIMIT = 3;
+  private static final int COUNTER_LIMIT = 10;
+
+  private static final int ULTRA_COUNTER_MIN = 4;
+  private static final int ULTRA_COUNTER_MAX = 10;
 
   int row;
   int col;
@@ -47,6 +50,21 @@ class Instruction {
       case LEFT -> List.of(up(), down(), left());
       case RIGHT -> List.of(up(), down(), right());
     };
+  }
+
+  public List<Instruction> nextStepsUltra() {
+    if (direction == null) return List.of(up(), down(), left(), right());
+
+    return switch (direction) {
+      case UP -> shouldContinue() ? List.of(up()) : List.of(up(), left(), right());
+      case DOWN -> shouldContinue() ? List.of(down()) : List.of(down(), left(), right());
+      case LEFT -> shouldContinue() ? List.of(left()) : List.of(up(), down(), left());
+      case RIGHT -> shouldContinue() ? List.of(right()) : List.of(up(), down(), right());
+    };
+  }
+
+  private boolean shouldContinue() {
+    return counter < ULTRA_COUNTER_MIN;
   }
 
   private int calculateCounter(Direction newDirection) {
