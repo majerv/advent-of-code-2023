@@ -2,9 +2,9 @@ package com.vimacodes.aoc.day17;
 
 class Day17Exercise1 {
   public long solve(final String text) {
-    //    Contraption contraption = Contraption.parse(text);
-    //    contraption.prettyPrint();
+    CityMap cityMap = CityMap.parse(text);
+    cityMap.prettyPrint();
 
-    return 0;
+    return cityMap.minimalHeatLossPath();
   }
 }

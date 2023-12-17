@@ -1,4 +1,4 @@
-package com.vimacodes.aoc.day16;
+package com.vimacodes.aoc.day17;
 
 enum Direction {
   UP,
