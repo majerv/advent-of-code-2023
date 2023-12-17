@@ -21,7 +21,7 @@ class Day17Exercise2Test {
     return Stream.of(
         Arguments.of("day17_sample", 94), //
         Arguments.of("day17_sample_ultra", 71), //
-        Arguments.of("day17_input", 0) //
+        Arguments.of("day17_input", 1106) //
         );
   }
 }
