@@ -3,7 +3,7 @@ package com.vimacodes.aoc.day10;
 import lombok.Value;
 
 @Value
-public class Position {
+class Position {
   int row;
   int col;
 
