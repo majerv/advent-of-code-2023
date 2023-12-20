@@ -10,12 +10,13 @@ public class FlipFlop extends Module {
   boolean isOn = false;
 
   public FlipFlop(String id, List<String> destinations) {
-    super(id, destinations);
+    super(id, destinations, null);
   }
 
   @Override
   public ModuleInstruction send(String senderModule, boolean pulse) {
-    printFlow(senderModule, pulse, getId());
+    lastPulse = pulse;
+    //    printFlow(senderModule, pulse, getId());
 
     if (pulse == ModuleConfiguration.HIGH_PULSE) {
       return ModuleInstruction.EMPTY;
@@ -23,5 +24,11 @@ public class FlipFlop extends Module {
 
     isOn = !isOn;
     return new ModuleInstruction(getId(), isOn, getDestinations());
+  }
+
+  @Override
+  public void reset() {
+    lastPulse = null;
+    isOn = false;
   }
 }

@@ -74,8 +74,42 @@ class ModuleConfiguration {
   }
 
   private Module getModuleOrEmpty(String id) {
-    Module module = modules.get(id);
-    return module == null ? Module.emptyModule(id) : module;
+    modules.putIfAbsent(id, Module.emptyModule(id));
+    return modules.get(id);
+  }
+
+  public boolean hasSent(String id, boolean pulse) {
+    Optional<Boolean> lastPulse = modules.get(id).getLastReceivedPulse();
+    //    System.out.printf("Last received pulse for %s: %s\n", id,
+    // lastPulse.map(this::toPulseString).orElse(""));
+    return lastPulse.isPresent() && lastPulse.get() == pulse;
+  }
+
+  public String getLastPulse(String id) {
+    return modules.get(id).getLastReceivedPulse().map(this::toPulseString).orElse("");
+  }
+
+  private String toPulseString(boolean lastPulse) {
+    return !lastPulse ? "LOW" : "HIGH";
+  }
+
+  public long getPressesTilHighPulse(String sender, String destination) {
+    reset();
+
+    boolean found = false;
+    long counter = 0;
+    while (!found && counter < 1_000_00) {
+      ++counter;
+      pushButton(1);
+      found = getModuleOrEmpty(destination).hasSent(sender, HIGH_PULSE);
+      //    hasSent(destination, ModuleConfiguration.HIGH_PULSE);
+    }
+
+    return found ? counter : -1;
+  }
+
+  private void reset() {
+    modules.forEach((k, v) -> v.reset());
   }
 
   public record Result(long lowPulses, long highPulses) {}

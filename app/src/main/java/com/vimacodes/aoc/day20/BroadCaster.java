@@ -7,12 +7,18 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class BroadCaster extends Module {
   public BroadCaster(String id, List<String> destinations) {
-    super(id, destinations);
+    super(id, destinations, null);
   }
 
   @Override
   public ModuleInstruction send(String senderModule, boolean pulse) {
-    printFlow(senderModule, pulse, getId());
+    lastPulse = pulse;
+    //    printFlow(senderModule, pulse, getId());
     return new ModuleInstruction(getId(), pulse, getDestinations());
+  }
+
+  @Override
+  public void reset() {
+    lastPulse = null;
   }
 }

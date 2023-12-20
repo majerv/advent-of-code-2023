@@ -1,25 +1,27 @@
 package com.vimacodes.aoc.day20;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import lombok.ToString;
 
 @ToString(callSuper = true)
 public class Conjunction extends Module {
 
   Map<String, Boolean> memory;
+  Set<String> highs;
 
   public Conjunction(String id, List<String> destinations) {
-    super(id, destinations);
+    super(id, destinations, null);
     memory = new HashMap<>();
+    highs = new HashSet<>();
   }
 
   @Override
   public ModuleConfiguration.ModuleInstruction send(String senderModule, boolean pulse) {
-    printFlow(senderModule, pulse, getId());
+    //    printFlow(senderModule, pulse, getId());
+    lastPulse = pulse;
 
     memory.put(senderModule, pulse);
+    if (pulse) highs.add(senderModule);
 
     // should remember all
     boolean hasLow = memory.values().stream().anyMatch(v -> !v);
@@ -29,6 +31,18 @@ public class Conjunction extends Module {
   @Override
   public void registerInput(String inputModule) {
     memory.putIfAbsent(inputModule, ModuleConfiguration.LOW_PULSE);
-    System.out.printf("Module: %s registering input: %s\n", getId(), inputModule);
+    //    System.out.printf("Module: %s registering input: %s\n", getId(), inputModule);
+  }
+
+  @Override
+  public void reset() {
+    lastPulse = null;
+    memory.forEach((k, v) -> memory.put(k, false));
+    highs.clear();
+  }
+
+  @Override
+  public boolean hasSent(String sender, boolean highPulse) {
+    return highs.contains(sender);
   }
 }

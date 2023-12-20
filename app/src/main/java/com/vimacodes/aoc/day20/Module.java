@@ -3,10 +3,13 @@ package com.vimacodes.aoc.day20;
 import com.vimacodes.aoc.day20.ModuleConfiguration.ModuleInstruction;
 import java.util.Arrays;
 import java.util.List;
-import lombok.Value;
+import java.util.Optional;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.experimental.NonFinal;
 
-@Value
+@Data
+@AllArgsConstructor
 @NonFinal
 abstract class Module {
 
@@ -15,6 +18,7 @@ abstract class Module {
 
   String id;
   List<String> destinations;
+  Boolean lastPulse;
 
   public static Module parse(String line) {
     String[] parts = line.split("->");
@@ -38,11 +42,21 @@ abstract class Module {
 
   public abstract ModuleInstruction send(String senderModule, boolean pulse);
 
+  public abstract void reset();
+
   public void registerInput(String inputModule) {
     // do nothing in most of the cases
   }
 
   public static void printFlow(String senderModule, boolean pulse, String id) {
-    //    System.out.printf("%s -%s-> %s\n", senderModule, pulse ? "high" : "low", id);
+    System.out.printf("%s -%s-> %s\n", senderModule, pulse ? "high" : "low", id);
+  }
+
+  public Optional<Boolean> getLastReceivedPulse() {
+    return Optional.ofNullable(lastPulse);
+  }
+
+  public boolean hasSent(String sender, boolean highPulse) {
+    return false;
   }
 }
