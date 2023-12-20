@@ -29,6 +29,7 @@ public class Conjunction extends Module {
 
   @Override
   public void registerInput(String inputModule) {
+    inputs.add(inputModule);
     memory.putIfAbsent(inputModule, ModuleConfiguration.LOW_PULSE);
     //    System.out.printf("Module: %s registering input: %s\n", getId(), inputModule);
   }

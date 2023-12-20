@@ -1,14 +1,13 @@
 package com.vimacodes.aoc.day20;
 
 import com.vimacodes.aoc.day20.ModuleConfiguration.ModuleInstruction;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.experimental.NonFinal;
 
-@Data
-@AllArgsConstructor
+@Getter
 @NonFinal
 abstract class Module {
 
@@ -17,6 +16,13 @@ abstract class Module {
 
   String id;
   List<String> destinations;
+  List<String> inputs;
+
+  public Module(String id, List<String> destinations) {
+    this.id = id;
+    this.destinations = destinations;
+    inputs = new ArrayList<>();
+  }
 
   public static Module parse(String line) {
     String[] parts = line.split("->");
@@ -43,7 +49,7 @@ abstract class Module {
   public void reset() {}
 
   public void registerInput(String inputModule) {
-    // do nothing in most of the cases
+    inputs.add(inputModule);
   }
 
   public static void printFlow(String senderModule, boolean pulse, String id) {

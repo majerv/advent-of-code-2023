@@ -23,22 +23,22 @@ class ModuleConfiguration {
     Map<String, Module> modules =
         text.lines().map(Module::parse).collect(Collectors.toMap(Module::getId, m -> m));
 
-    // register inputs for conjunctions
-    Set<String> conjunctions =
-        modules.values().stream()
-            .filter(m -> m instanceof Conjunction)
-            .map(Module::getId)
-            .collect(Collectors.toSet());
+    // create final destinations and register inputs for all modules
+    Map<String, Module> modules2nd = new HashMap<>(modules);
 
     for (var module : modules.values()) {
       for (var dest : module.getDestinations()) {
-        if (conjunctions.contains(dest)) {
-          modules.get(dest).registerInput(module.getId());
-        }
+        Module moduleToUpdate = getModuleOrCreateEmpty(modules2nd, dest);
+        moduleToUpdate.registerInput(module.id);
+        modules2nd.put(moduleToUpdate.id, moduleToUpdate);
       }
     }
 
-    return new ModuleConfiguration(modules);
+    return new ModuleConfiguration(modules2nd);
+  }
+
+  private static Module getModuleOrCreateEmpty(Map<String, Module> modules, String id) {
+    return modules.containsKey(id) ? modules.get(id) : Module.emptyModule(id);
   }
 
   public Result pushButton(int times) {
@@ -66,18 +66,13 @@ class ModuleConfiguration {
       else lowPulses += inst.destinations.size();
 
       for (var id : inst.destinations) {
-        Module module = getModuleOrEmpty(id);
+        Module module = modules.get(id);
         ModuleInstruction newInst = module.send(inst.senderModule, inst.pulse);
         instructions.add(newInst);
       }
     }
 
     return new Result(lowPulses, highPulses);
-  }
-
-  private Module getModuleOrEmpty(String id) {
-    modules.putIfAbsent(id, Module.emptyModule(id));
-    return modules.get(id);
   }
 
   public long getPressesTilHighPulse(String sender, String destination) {
@@ -88,17 +83,25 @@ class ModuleConfiguration {
     while (!found && counter < MAX_LOOPS) {
       ++counter;
       pushButton(1);
-      found = getModuleOrEmpty(destination).hasSent(sender, HIGH_PULSE);
+      found = modules.get(destination).hasSent(sender, HIGH_PULSE);
     }
 
-    return found ? counter : -1;
+    return found ? counter : 0;
   }
 
   private void reset() {
     modules.forEach((k, v) -> v.reset());
   }
 
+  public List<SourceDest> findInputs(String destination) {
+    return modules.get(destination).getInputs().stream()
+        .map(s -> new SourceDest(s, destination))
+        .toList();
+  }
+
   public record Result(long lowPulses, long highPulses) {}
+
+  public record SourceDest(String source, String destination) {}
 
   public record ModuleInstruction(String senderModule, boolean pulse, List<String> destinations) {
     public static final ModuleInstruction EMPTY =
