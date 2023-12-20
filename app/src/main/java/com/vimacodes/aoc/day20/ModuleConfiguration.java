@@ -12,6 +12,8 @@ class ModuleConfiguration {
   public static final boolean LOW_PULSE = false;
   public static final boolean HIGH_PULSE = true;
 
+  private static final double MAX_LOOPS = 10_000;
+
   private static final ModuleInstruction START_INSTRUCTION =
       new ModuleInstruction(BUTTON_NAME, LOW_PULSE, List.of(Module.BROADCASTER_NAME));
 
@@ -78,31 +80,15 @@ class ModuleConfiguration {
     return modules.get(id);
   }
 
-  public boolean hasSent(String id, boolean pulse) {
-    Optional<Boolean> lastPulse = modules.get(id).getLastReceivedPulse();
-    //    System.out.printf("Last received pulse for %s: %s\n", id,
-    // lastPulse.map(this::toPulseString).orElse(""));
-    return lastPulse.isPresent() && lastPulse.get() == pulse;
-  }
-
-  public String getLastPulse(String id) {
-    return modules.get(id).getLastReceivedPulse().map(this::toPulseString).orElse("");
-  }
-
-  private String toPulseString(boolean lastPulse) {
-    return !lastPulse ? "LOW" : "HIGH";
-  }
-
   public long getPressesTilHighPulse(String sender, String destination) {
     reset();
 
     boolean found = false;
     long counter = 0;
-    while (!found && counter < 1_000_00) {
+    while (!found && counter < MAX_LOOPS) {
       ++counter;
       pushButton(1);
       found = getModuleOrEmpty(destination).hasSent(sender, HIGH_PULSE);
-      //    hasSent(destination, ModuleConfiguration.HIGH_PULSE);
     }
 
     return found ? counter : -1;

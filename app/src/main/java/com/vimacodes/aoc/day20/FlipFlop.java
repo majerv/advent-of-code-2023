@@ -10,12 +10,11 @@ public class FlipFlop extends Module {
   boolean isOn = false;
 
   public FlipFlop(String id, List<String> destinations) {
-    super(id, destinations, null);
+    super(id, destinations);
   }
 
   @Override
   public ModuleInstruction send(String senderModule, boolean pulse) {
-    lastPulse = pulse;
     //    printFlow(senderModule, pulse, getId());
 
     if (pulse == ModuleConfiguration.HIGH_PULSE) {
@@ -28,7 +27,6 @@ public class FlipFlop extends Module {
 
   @Override
   public void reset() {
-    lastPulse = null;
     isOn = false;
   }
 }

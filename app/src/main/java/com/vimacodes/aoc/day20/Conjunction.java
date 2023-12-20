@@ -10,7 +10,7 @@ public class Conjunction extends Module {
   Set<String> highs;
 
   public Conjunction(String id, List<String> destinations) {
-    super(id, destinations, null);
+    super(id, destinations);
     memory = new HashMap<>();
     highs = new HashSet<>();
   }
@@ -18,7 +18,6 @@ public class Conjunction extends Module {
   @Override
   public ModuleConfiguration.ModuleInstruction send(String senderModule, boolean pulse) {
     //    printFlow(senderModule, pulse, getId());
-    lastPulse = pulse;
 
     memory.put(senderModule, pulse);
     if (pulse) highs.add(senderModule);
@@ -36,7 +35,6 @@ public class Conjunction extends Module {
 
   @Override
   public void reset() {
-    lastPulse = null;
     memory.forEach((k, v) -> memory.put(k, false));
     highs.clear();
   }

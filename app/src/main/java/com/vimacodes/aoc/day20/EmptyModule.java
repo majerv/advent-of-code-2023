@@ -8,18 +8,12 @@ import lombok.ToString;
 class EmptyModule extends Module {
 
   public EmptyModule(String id) {
-    super(id, Collections.emptyList(), null);
+    super(id, Collections.emptyList());
   }
 
   @Override
   public ModuleInstruction send(String senderModule, boolean pulse) {
-    lastPulse = pulse;
     //    printFlow(senderModule, pulse, getId());
     return new ModuleInstruction(getId(), pulse, getDestinations());
-  }
-
-  @Override
-  public void reset() {
-    lastPulse = null;
   }
 }
