@@ -19,8 +19,9 @@ class Day20Exercise1Test {
 
   private static Stream<Arguments> testInputs() {
     return Stream.of(
-        Arguments.of("day20_sample", 0), //
-        Arguments.of("day20_input", 0) //
+        Arguments.of("day20_sample", 32000000L), //
+        Arguments.of("day20_sample2", 11687500L), //
+        Arguments.of("day20_input", 841763884L) //
         );
   }
 }
