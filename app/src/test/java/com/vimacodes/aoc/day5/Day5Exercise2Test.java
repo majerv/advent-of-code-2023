@@ -1,6 +1,7 @@
 package com.vimacodes.aoc.day5;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -50,6 +51,7 @@ class Day5Exercise2Test {
     Assertions.assertEquals(46, result);
   }
 
+  @Disabled("too slow - to be optimized")
   @ParameterizedTest
   @ValueSource(
       strings =

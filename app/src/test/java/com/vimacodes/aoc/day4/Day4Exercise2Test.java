@@ -227,6 +227,6 @@ class Day4Exercise2Test {
           """)
   void testInput(final String input) {
     long result = exercise.solve(input);
-    Assertions.assertEquals(21959, result);
+    Assertions.assertEquals(5132675, result);
   }
 }

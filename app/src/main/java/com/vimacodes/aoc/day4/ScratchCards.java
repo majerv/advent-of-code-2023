@@ -21,8 +21,8 @@ class ScratchCards {
     }
   }
 
-  // TO BE REFACTORED WITH DYN PROG! :)))
-  public int play() {
+  // REFACTORED WITH DYN PROG! - see below :)))
+  public int playBruteForce() {
     int cardsPlayed = 0;
     List<Integer> toPlay = new ArrayList<>(idToCommon.keySet().stream().toList());
 
@@ -43,7 +43,30 @@ class ScratchCards {
     return cardsPlayed;
   }
 
-  private Collection<Card> getCardsFrom(int index, int numberOfCards) {
-    return cards.subList(index, index + numberOfCards);
+  public int play() {
+    int cardsWon = 0;
+    Map<Integer, Integer> memo = new HashMap<>();
+
+    for (int i = 1; i <= idToCommon.size(); i++) {
+      cardsWon += cardsWon(i, memo);
+    }
+
+    return cardsWon;
+  }
+
+  private int cardsWon(int cardId, Map<Integer, Integer> memo) {
+    if (memo.containsKey(cardId)) {
+      return memo.get(cardId);
+    }
+
+    int cardsWon = idToCommon.get(cardId);
+    int total = 1;
+
+    for (int i = cardId + 1; i < cardId + cardsWon + 1; i++) {
+      total += cardsWon(i, memo);
+    }
+
+    memo.put(cardId, total);
+    return total;
   }
 }
